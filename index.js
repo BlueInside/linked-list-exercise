@@ -5,20 +5,22 @@ function linkedList() {
     if (!_head) {
       _head = node(value);
       _tail = _head;
-      return;
+      return _tail;
     }
     const newNode = node(value);
     _tail.nextNode = newNode;
     _tail = newNode;
+    return _tail;
   }
   function prepend(value) {
     if (!_head) {
       _head = node(value);
       _tail = _head;
-      return;
+      return _head;
     }
     const newNode = node(value, _head);
     _head = newNode;
+    return _head;
   }
   function size() {
     let count = 0;
@@ -84,6 +86,53 @@ function linkedList() {
     }
     return -1;
   }
+  function insertAt(value, index) {
+    let count = 0;
+    let listSize = size();
+    let currentNode = _head;
+    let previousNode = null;
+
+    if (index === 0) return prepend(value);
+
+    if (listSize <= index) return `Index out of list range`;
+    while (currentNode) {
+      if (count === index - 1) previousNode = currentNode;
+      if (count === index) {
+        const newNode = node(value, currentNode);
+        previousNode.nextNode = newNode;
+        break;
+      }
+      currentNode = currentNode.nextNode;
+      count += 1;
+    }
+    return previousNode.nextNode;
+  }
+  function removeAt(index) {
+    let count = 0;
+    let listSize = size();
+    let currentNode = _head;
+    let previousNode = null;
+    let deletedNode = null;
+
+    if (listSize <= index) return `Index out of list range`;
+    if (index === 0) {
+      const removedNode = _head;
+      _head = _head.nextNode || null;
+      return removedNode;
+    }
+
+    while (currentNode) {
+      if (count === index - 1) previousNode = currentNode;
+
+      if (count === index) {
+        deletedNode = currentNode;
+      }
+      if (index === listSize - 1) _tail = previousNode;
+      currentNode = currentNode.nextNode;
+      count += 1;
+    }
+    return deletedNode;
+  }
 
   function toString() {
     // represent linked list objects as strings
@@ -106,6 +155,8 @@ function linkedList() {
     pop,
     contains,
     find,
+    insertAt,
+    removeAt,
     toString,
   };
 }
